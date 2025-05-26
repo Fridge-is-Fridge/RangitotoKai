@@ -3,6 +3,8 @@ premium_menu = {7 : "Paua and Prawn Dumplings",8 : "Kina Canapes", 9 : "Kumara a
 budget_price = 6
 premium_price = budget_price * 1.5
 all_orders = {}
+valid_pc = ["0620", "0630", "0632"]
+total_cost = 0
 
 name = input("What is the name for the order?")
 print(budget_menu)
@@ -16,9 +18,11 @@ if order_yn.lower() == "yes":
         order_stuff = int(input("What would you like to order? (Theres a minimum of three items :P)"))
         if 1 <= order_stuff <= 6:
             ordered.append(budget_menu[int(order_stuff)])
+            total_cost = total_cost + budget_price
             print(ordered)
         elif 7 <= order_stuff <= 11:
             ordered.append(premium_menu[int(order_stuff)])
+            total_cost = total_cost + premium_price
             print(ordered)
         else:
             print("Enter a valid numerical input")
@@ -26,10 +30,44 @@ if order_yn.lower() == "yes":
             order_yn = input("Would you like to order another item??")
 
 
-    pick_deliver = ""
+    pick_deliver = input("Pick up or delivery?")
+    if pick_deliver.lower() == "delivery":
+        postcode = input("What is your postal code?")
+        if postcode == "0620" or postcode == "0630" or postcode == "0632":
+            print("ye")
+            house_num = input("What is your house number?")
+            street = input("What is your street name?")
+            suburb = input("What is your suburb?")
+            phone = int(input("What is your phone number?"))
+            total_cost = total_cost + 5
+        else:
+            print("unfortunately delivery is not available for your area, you will have to pick up your order")
+    elif pick_deliver.lower() == "pick up":
+        print("alr your order will be ready for pickup")
+    else:
+        print("bro enter either 'pick up' or 'delivery'")
+        pick_deliver = input("Pick-up or delivery?")
+
+    order1 = [name, ordered, pick_deliver, house_num, street, suburb, phone, total_cost]
+    print(order1)
+
+    new_order = input("would you like to place another order?")
+
+
+
+else:
+    print("Mkay, have a good dayy")
+
+
+
+
+
+
+"""
+
+    pick_deliver = input("Pick-up or delivery?")
 
     while pick_deliver.lower() != "pick-up" or "pick up" or "delivery":
-        pick_deliver = input("Pick-up or delivery?")
         if pick_deliver.lower() == "pick up" or "pick-up":
             print("alr")
             break
@@ -45,18 +83,6 @@ if order_yn.lower() == "yes":
             break
         else:
             print("bro enter either 'pick up' or 'delivery'")
-
-
-
-
-
-
-
-
-
-
-else:
-    print("Mkay, have a good dayy")
-
-
+            pick_deliver = input("Pick-up or delivery?")
+"""
 
