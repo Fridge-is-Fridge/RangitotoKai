@@ -9,9 +9,7 @@ house_num = 0
 street = ""
 suburb = ""
 phone = ""
-ordered = []
 order_num = 0
-order_more = "yes"
 
 
 name = input("What is the name for the order?")
@@ -22,18 +20,18 @@ print(premium_menu)
 #I know there's magic numbers ill deal with them laters
 order_yn = input("Would you like to order?")
 while order_yn.lower() == "yes":
-    order_num =+ 1
+    ordered = []
+    order_more = "yes"
+    order_num = order_num + 1
     if order_more.lower() == "yes" :
         while  order_more.lower() == "yes" or len(ordered) < 3:
             order_stuff = int(input("What would you like to order? (Theres a minimum of three items :P)"))
             if 1 <= order_stuff <= 6:
                 ordered.append(budget_menu[int(order_stuff)])
                 total_cost = total_cost + budget_price
-                print(ordered)
             elif 7 <= order_stuff <= 11:
                 ordered.append(premium_menu[int(order_stuff)])
                 total_cost = total_cost + premium_price
-                print(ordered)
             else:
                 print("Enter a valid numerical input")
             if len(ordered) >= 3 :
@@ -59,47 +57,15 @@ while order_yn.lower() == "yes":
             pick_deliver = input("Pick-up or delivery?")
     else:
         print("Mkay, have a good dayy")
-
-
-
     order1 = [name, ordered, pick_deliver, house_num, street, suburb, phone, total_cost]
     print(order1)
-
-    new_order = input("would you like to place another order?")
-
-
+    order_yn = input("would you like to place another order?")
     all_orders[order_num] = order1
-
-
-    print(all_orders)
-
+print(all_orders)
 
 
 
 
 
 
-
-"""
-
-    pick_deliver = input("Pick-up or delivery?")
-
-    while pick_deliver.lower() != "pick-up" or "pick up" or "delivery":
-        if pick_deliver.lower() == "pick up" or "pick-up":
-            print("alr")
-            break
-        elif pick_deliver.lower() == "delivery":
-            try:
-                postcode = input("What is your postal code?")
-            except ValueError :
-                while postcode != int:
-                    print("enter a number bro")
-                    postcode = input("What is your postal code?")
-                    if postcode == int:
-                        break
-            break
-        else:
-            print("bro enter either 'pick up' or 'delivery'")
-            pick_deliver = input("Pick-up or delivery?")
-"""
 
