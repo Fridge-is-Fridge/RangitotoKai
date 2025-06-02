@@ -1,57 +1,29 @@
 budget_price = 6
 premium_price = budget_price * 1.5
 
+budget_menu = {
+    1 : "Kawakawa Spritzer",
+    2 : "Pork and Puha Slider",
+    3 : "Horopito Fish Collars",
+    4 : "Kawakawa Muscles",
+    5 : "Taro and Coconut Fritters",
+    6 : "Kumara and Fennel Salad"
+}
 
-budget_menu = [
-    {
-        "id": 1,
-        "name": "Kawakawa Spritzer",
-        "price": budget_price
-    },
-    {
-        "id": 2,
-        "name": "Pork and Puha Slider",
-        "price": budget_price
-    },
-    {3 : "Horopito Fish Collars"},{4 : "Kawakawa Muscles"},{5 : "Taro and Coconut Fritters"},{6 : "Kumara and Fennel Salad"}]
-
-
-
-
-
+premium_menu = {
+    7 : "Paua and Prawn Dumplings",
+    8 : "Kina Canapes",
+    9 : "Kumara and Truffle Ravioli",
+    10 : "Manuka Smoked Salmon",
+    11 : "Paua Porridge"
+}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-premium_menu = {7 : "Paua and Prawn Dumplings",8 : "Kina Canapes", 9 : "Kumara and Truffle Ravioli",10 : "Manuka Smoked Salmon", 11 : "Paua Porridge" }
 
 all_orders = {}
 valid_pc = ["0620", "0630", "0632"]
-total_cost = 0
+
 house_num = 0
 street = ""
 suburb = ""
@@ -61,25 +33,22 @@ min_items = 3
 budget_list_end = 6
 prem_start = 7
 prem_end = 11
-deliver_cost =
+deliver_cost = 5
 
-def get_name():
-    name = input("What is the name for the order?")
-    print(budget_menu)
-    print(premium_menu)
-
-
-
-
-
+def print_menu():
+    for k, v in budget_menu.items():
+        print("BUDGET MENU:")
+        print(f"{k}. {v} ${float(budget_price)}")
+    for k, v in premium_menu.items():
+        print("PREMIUM MENU:")
+        print(f"{k}. {v} ${float(premium_price)}")
 
 
-#I know there's magic numbers ill deal with them laters
 def get_order():
-    order_yn = input("Would you like to order?")
+    name = input("What is the name for the order?")
+    ordered = []
+    total_cost = 0
     while order_yn.lower() == "yes":
-        ordered = []
-        order_more = "yes"
         order_num = order_num + 1
         if order_more.lower() == "yes" :
             while  order_more.lower() == "yes" or len(ordered) < min_items:
@@ -99,7 +68,7 @@ def get_order():
             pick_deliver = input("Pick up or delivery?")
             if pick_deliver.lower() == "delivery":
                 postcode = input("What is your postal code?")
-                if postcode == "0620" or postcode == "0630" or postcode == "0632":
+                if postcode in valid_pc:
                     print("ye")
                     house_num = input("What is your house number?")
                     street = input("What is your street name?")
@@ -115,14 +84,29 @@ def get_order():
                 pick_deliver = input("Pick-up or delivery?")
         else:
             print("Mkay, have a good dayy")
-        order1 = [name, ordered, pick_deliver, house_num, street, suburb, phone, total_cost]
+        gst_excl = total_cost / 1.15
+        order1 = [name, pick_deliver, ordered, house_num, street, suburb, phone, gst_excl, total_cost ]
+        n = len(order1)
+
+            print(f"Name: {0}"
+                  f"Order type: {1}"
+                  f"Items ordered: {2}"
+                  f"Total excl GST: {float(7)}"
+                  f"Total incl GST: {float(8)}"
+                  )
+
         print(order1)
         order_yn = input("would you like to place another order?")
         all_orders[order_num] = order1
 
 print(all_orders)
 
-
+order_yn = input("Would you like to order?")
+print_menu()
+if order_yn == "yes":
+    get_order()
+else:
+    print("Alright have a good day")
 
 
 
