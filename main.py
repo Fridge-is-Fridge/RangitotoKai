@@ -1,5 +1,6 @@
 budget_price = 6
 premium_price = budget_price * 1.5
+delivery_cost = 5
 
 budget_menu = {
     1 : "Kawakawa Spritzer",
@@ -18,100 +19,115 @@ premium_menu = {
     11 : "Paua Porridge"
 }
 
-
-
-
-all_orders = {}
 valid_pc = ["0620", "0630", "0632"]
-
-
-
+all_orders = {}
+order_num = 0
 
 
 def print_menu():
-
+    print("BUDGET MENU:")
     for k, v in budget_menu.items():
-        print("BUDGET MENU:")
-        print(f"{k}. {v} ${float(budget_price)}")
+        print(f"{k}. {v} ${budget_price:.2f}")
+    print("PREMIUM MENU:")
     for k, v in premium_menu.items():
-        print("PREMIUM MENU:")
-        print(f"{k}. {v} ${float(premium_price)}")
+        print(f"{k}. {v} ${premium_price:.2f}")
 
 
 
 def get_order():
+    ordered = []
     total_cost = 0
     name = input("What is the name for the order?")
-    ordered = []
+
+    order_more = "yes"
     min_items = 3
     budget_list_end = 6
     prem_start = 7
     prem_end = 11
-    deliver_cost = 5
-    order_more = "yes"
-    while  order_more.lower() == "yes" or len(ordered) < min_items:
-        order_stuff = int(input("What would you like to order? (Theres a minimum of three items :P)"))
-        if 1 <= order_stuff <= budget_list_end:
-            ordered.append(budget_menu[int(order_stuff)])
-            total_cost = total_cost + budget_price
-        elif prem_start <= order_stuff <= prem_end:
-            ordered.append(premium_menu[int(order_stuff)])
-            total_cost = total_cost + premium_price
-        else:
-            print("Enter a valid numerical input")
+
+
+    while  order_more == "yes" or len(ordered) < min_items:
+        try:
+            item = int(input("Please enter the number of the item you would like (Theres a minimum of three items :P)"))
+            if item in budget_menu:
+                ordered.append(budget_menu[int(item)])
+                total_cost += budget_price
+            elif item in premium_menu:
+                ordered.append(premium_menu[int(item)])
+                total_cost += premium_price
+            else:
+                print("Invalid item number")
+        except ValueError:
+            print("Please enter a number")
         if len(ordered) >= 3 :
-            order_more = input("Would you like to order another item??")
+            order_more = input("Would you like to order another item??").lower()
         else:
             pass
-    pick_deliver = input("Pick up or delivery?")
-    if pick_deliver.lower() == "delivery":
+
+    pick_deliver = input("Pick up or delivery?").lower()
+
+
+    if pick_deliver == "delivery":
         postcode = input("What is your postal code?")
         if postcode in valid_pc:
-            print("ye")
-            house_num = input("What is your house number?")
-            street = input("What is your street name?")
-            suburb = input("What is your suburb?")
+            address = ""
+            address = input("What is your address?")
             phone = int(input("What is your phone number?"))
-            total_cost = total_cost + 5
+            total_cost += delivery_cost
         else:
             print("unfortunately delivery is not available for your area, you will have to pick up your order")
-    elif pick_deliver.lower() == "pick up":
-        print("alr your order will be ready for pickup")
+            var = pick_deliver == "pick up"
+    elif pick_deliver == "pick up":
+        print("Your order will be ready for pickup")
     else:
         print("bro enter either 'pick up' or 'delivery'")
         pick_deliver = input("Pick-up or delivery?")
 
-total_cost = 0
-def print_receipt():
-    gst_excl = total_cost / 1.15
-    order1 = [name, pick_deliver, ordered, house_num, street, suburb, phone, gst_excl, total_cost ]
-    n = len(order1)
-    print(f"Name: {0}"
-            f"Order type: {1}"
-            f"Items ordered: {2}"
-            f"Total excl GST: {float(7)}"
-            f"Total incl GST: {float(8)}"
-            )
-
-    print(order1)
-    order_yn = input("would you like to place another order?")
-    all_orders[order_num] = order1
+    return {
+        "name": name,
+        "method": pick_deliver,
+        "items": ordered,
+        "address": address,
+        "phone": phone,
+        "total_cost": total_cost
+    }
 
 
-print(all_orders)
+
+def print_receipt(order, order_num):
+    gst_excl = round(order["total_cost"] / 1.15, 2)
+    print(f"\n--- Receipt for Order #{order_num} ---")
+    print(f"Name: {order['name']}")
+    print(f"Order type: {order['method']}")
+    print(f"Items ordered: {order['items']}")
+    print(f"Total (excluding GST): ${gst_excl}")
+    print(f"Total (including GST): ${order['total_cost']:.2f}")
+
+    if order["method"] == "delivery":
+        print(f"Delivery address: {order['address']}")
+        print(f"Phone: {order['phone']}")
+
+
+
 
 
 print_menu()
-order_yn = input("Would you like to order?")
-if order_yn == "yes":
-    order_num = 0
-    while order_yn == "yes":
-        order_num = order_num + 1
-        get_order()
-        print_receipt()
-        order_yn = input("Would you like to place another order")
-else:
-    print("Alright have a good day")
+order_yn = input("Would you like to place an order? (yes/no): ").lower()
+
+while order_yn == "yes":
+    order_num += 1
+    order = get_order()
+    print_receipt(order, order_num)
+    all_orders[order_num] = order
+    order_yn = input("\nWould you like to place another order? (yes/no): ").lower()
+
+# Final summary
+print("\n--- All Orders Summary ---")
+for num, order in all_orders.items():
+    print(f"\nOrder #{num}:")
+    print(f"  Name: {order['name']}")
+    print(f"  Items: {order['items']}")
+    print(f"  Total: ${order['total_cost']:.2f}")
 
 
 
