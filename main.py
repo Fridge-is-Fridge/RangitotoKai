@@ -1,8 +1,10 @@
-budget_price = 6
-premium_price = budget_price * 1.5
-delivery_cost = 5
-
-budget_menu = {
+#constants
+BUDGET_PRICE = 6
+PREMIUM_PRICE = BUDGET_PRICE * 1.5
+DELIVERY_FEE = 5.00
+VALID_POSTCODES = ["0620", "0630", "0632"]
+MIN_ITEMS = 3
+BUDGET_MENU = {
     1 : "Kawakawa Spritzer",
     2 : "Pork and Puha Slider",
     3 : "Horopito Fish Collars",
@@ -10,8 +12,7 @@ budget_menu = {
     5 : "Taro and Coconut Fritters",
     6 : "Kumara and Fennel Salad"
 }
-
-premium_menu = {
+PREMIUM_MENU = {
     7 : "Paua and Prawn Dumplings",
     8 : "Kina Canapes",
     9 : "Kumara and Truffle Ravioli",
@@ -19,61 +20,53 @@ premium_menu = {
     11 : "Paua Porridge"
 }
 
-valid_pc = ["0620", "0630", "0632"]
+
 all_orders = {}
 order_num = 0
 
 
 def print_menu():
     print("BUDGET MENU:")
-    for k, v in budget_menu.items():
-        print(f"{k}. {v} ${budget_price:.2f}")
+    for k, v in BUDGET_MENU.items():
+        print(f"{k}. {v} ${BUDGET_PRICE:.2f}")
     print("PREMIUM MENU:")
-    for k, v in premium_menu.items():
-        print(f"{k}. {v} ${premium_price:.2f}")
-
+    for k, v in PREMIUM_MENU.items():
+        print(f"{k}. {v} ${PREMIUM_PRICE:.2f}")
 
 
 def get_order():
     ordered = []
     total_cost = 0
     name = input("What is the name for the order?")
-
     order_more = "yes"
-    min_items = 3
-    budget_list_end = 6
-    prem_start = 7
-    prem_end = 11
-
-
-    while  order_more == "yes" or len(ordered) < min_items:
+    while  order_more == "yes" or len(ordered) < MIN_ITEMS:
         try:
             item = int(input("Please enter the number of the item you would like (Theres a minimum of three items :P)"))
-            if item in budget_menu:
-                ordered.append(budget_menu[int(item)])
-                total_cost += budget_price
-            elif item in premium_menu:
-                ordered.append(premium_menu[int(item)])
-                total_cost += premium_price
+            if item in BUDGET_MENU:
+                ordered.append(BUDGET_MENU[int(item)])
+                total_cost += BUDGET_PRICE
+            elif item in PREMIUM_MENU:
+                ordered.append(PREMIUM_MENU[int(item)])
+                total_cost += PREMIUM_PRICE
             else:
                 print("Invalid item number")
         except ValueError:
             print("Please enter a number")
-        if len(ordered) >= 3 :
+        if len(ordered) >= MIN_ITEMS :
             order_more = input("Would you like to order another item??").lower()
         else:
             pass
 
     pick_deliver = input("Pick up or delivery?").lower()
 
-
+    address = "Unknown"
+    phone = "Unknown"
     if pick_deliver == "delivery":
         postcode = input("What is your postal code?")
-        if postcode in valid_pc:
-            address = ""
+        if postcode in VALID_POSTCODES:
             address = input("What is your address?")
             phone = int(input("What is your phone number?"))
-            total_cost += delivery_cost
+            total_cost += DELIVERY_FEE
         else:
             print("unfortunately delivery is not available for your area, you will have to pick up your order")
             var = pick_deliver == "pick up"
@@ -96,9 +89,10 @@ def get_order():
 
 def print_receipt(order, order_num):
     gst_excl = round(order["total_cost"] / 1.15, 2)
-    print(f"\n--- Receipt for Order #{order_num} ---")
+    print(f"\nOrder {order_num}:")
     print(f"Name: {order['name']}")
-    print(f"Order type: {order['method']}")
+    print(f"Order type: "
+          f"{order[*'method']}")
     print(f"Items ordered: {order['items']}")
     print(f"Total (excluding GST): ${gst_excl}")
     print(f"Total (including GST): ${order['total_cost']:.2f}")
@@ -106,6 +100,7 @@ def print_receipt(order, order_num):
     if order["method"] == "delivery":
         print(f"Delivery address: {order['address']}")
         print(f"Phone: {order['phone']}")
+        print(f"Delivery fee ${DELIVERY_FEE:.2F}")
 
 
 
@@ -124,7 +119,7 @@ while order_yn == "yes":
 # Final summary
 print("\n--- All Orders Summary ---")
 for num, order in all_orders.items():
-    print(f"\nOrder #{num}:")
+    print(f"\nOrder {num}:")
     print(f"  Name: {order['name']}")
     print(f"  Items: {order['items']}")
     print(f"  Total: ${order['total_cost']:.2f}")
