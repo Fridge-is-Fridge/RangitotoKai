@@ -1,4 +1,4 @@
-#constants
+# Constants
 BUDGET_PRICE = 6
 PREMIUM_PRICE = BUDGET_PRICE * 1.5
 DELIVERY_FEE = 5.00
@@ -34,7 +34,7 @@ def print_menu():
         print(f"{k}. {v} ${PREMIUM_PRICE:.2f}")
 
 
-def get_order():
+def get_order(order_num):
     ordered = []
     total_cost = 0
     name = input("What is the name for the order?")
@@ -92,7 +92,7 @@ def print_receipt(order, order_num):
     print(f"\nOrder {order_num}:")
     print(f"Name: {order['name']}")
     print(f"Order type: "
-          f"{order[*'method']}")
+          f"{order['method']}")
     print(f"Items ordered: {order['items']}")
     print(f"Total (excluding GST): ${gst_excl}")
     print(f"Total (including GST): ${order['total_cost']:.2f}")
@@ -111,19 +111,45 @@ order_yn = input("Would you like to place an order? (yes/no): ").lower()
 
 while order_yn == "yes":
     order_num += 1
-    order = get_order()
+    order = get_order(0)
     print_receipt(order, order_num)
     all_orders[order_num] = order
     order_yn = input("\nWould you like to place another order? (yes/no): ").lower()
 
 # Final summary
-print("\n--- All Orders Summary ---")
+print("\nThank you for using this program.")
+print("=" * 40)
+print("Food orders today:")
+print("=" * 40)
+
+total_orders = len(all_orders)
+day_total = 0
+day_total_excl = 0
+
 for num, order in all_orders.items():
     print(f"\nOrder {num}:")
     print(f"  Name: {order['name']}")
-    print(f"  Items: {order['items']}")
-    print(f"  Total: ${order['total_cost']:.2f}")
+    print(f"Order type: {order['method'].capitalize()}")
+    if order['method'] == "delivery":
+        print(f"Phone number: {order['phone']}")
+        print(f"Address: {order['address']}")
+    print("Items ordered:")
+    for item, qty in order['items'].items():
+        price = BUDGET_PRICE if item in BUDGET_MENU.values() else PREMIUM_PRICE
+        subtotal = price * qty
+        print(f"{qty} x {item} @ ${price:.2f} = ${subtotal:.2f}")
+    if order['method'] == "delivery":
+        print(f"Delivery ${DELIVERY_FEE:.2f}")
+    print(f"Total excl GST: ${order['gst_excl']:.2f}")
+    print(f"Total incl GST: ${order['total_cost']:.2f}")
+    day_total += order['total_cost']
+    day_total_excl += order['gst_excl']
 
+print("=" * 40)
+print(f"Total orders: {total_orders}")
+print(f"Day total excl GST: ${day_total_excl:.2f}")
+print(f"Day total incl GST: ${day_total:.2f}")
+print("=" * 40)
 
 
 
