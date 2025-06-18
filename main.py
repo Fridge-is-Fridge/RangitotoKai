@@ -1,4 +1,4 @@
-"""This program takes food orders and prints their receipts"""
+"""This program takes food orders and prints their receipts."""
 BUDGET_PRICE = 6
 PREMIUM_PRICE = BUDGET_PRICE * 1.5
 DELIVERY_FEE = 5.00
@@ -23,8 +23,9 @@ PREMIUM_MENU = {
 all_orders = {}
 order_num = 0
 
+
 def print_menu():
-    """This function prints the menu"""
+    """Print Menu."""
     print("BUDGET MENU:")
     for k, v in BUDGET_MENU.items():
         print(f"{k}. {v} ${BUDGET_PRICE:.2f}")
@@ -32,15 +33,16 @@ def print_menu():
     for k, v in PREMIUM_MENU.items():
         print(f"{k}. {v} ${PREMIUM_PRICE:.2f}")
 
+
 def get_order(order_num):
-    """This function takes the customers order"""
+    """Take the customers order."""
     ordered = {}
     total_cost = 0
     name = input("What is the name for the order?")
     order_more = "yes"
     while order_more == "yes" or len(ordered) < MIN_ITEMS:
         try:
-            item = int(input("Enter item number (min 3 items, enter one by one :P)"))
+            item = int(input("Enter item number (min 3 items)"))
             qty = int(input("How many of them?"))
             if item in BUDGET_MENU:
                 ordered.update({BUDGET_MENU[int(item)]: qty})
@@ -53,7 +55,7 @@ def get_order(order_num):
         except ValueError:
             print("Please enter a number")
         if len(ordered) >= MIN_ITEMS:
-            order_more = input("Would you like to order another item??").lower()
+            order_more = input("Would you like to order another item?").lower()
 
         else:
             pass
@@ -69,8 +71,7 @@ def get_order(order_num):
             phone = int(input("What is your phone number?"))
             total_cost += DELIVERY_FEE
         else:
-            print("unfortunately delivery is not available for your area, you will have to pick up your order")
-            var = pick_deliver == "pick up"
+            print("We don't deliver to your area, redirecting to pick up")
     elif pick_deliver == "pick up":
         print("Your order will be ready for pickup")
     else:
@@ -88,8 +89,8 @@ def get_order(order_num):
     }
 
 
-
 def print_receipt(order, order_num):
+    """Print customers receipt."""
     gst_excl = round(order["total_cost"] / 1.15, 2)
     print(f"\nOrder {order_num}:")
     print(f"Name: {order['name']}")
@@ -108,9 +109,6 @@ def print_receipt(order, order_num):
         print(f"Delivery fee ${DELIVERY_FEE:.2F}")
 
 
-
-
-
 print_menu()
 order_yn = input("Would you like to place an order? (yes/no): ").lower()
 
@@ -119,7 +117,7 @@ while order_yn == "yes":
     order = get_order(0)
     print_receipt(order, order_num)
     all_orders[order_num] = order
-    order_yn = input("\nWould you like to place another order? (yes/no): ").lower()
+    order_yn = input("\nPlace another order? (yes/no): ").lower()
 
 # Final summary
 print("\nThank you for using this program.")
@@ -156,7 +154,4 @@ print(f"Total orders: {total_orders}")
 print(f"Day total excl GST: ${day_total_excl:.2f}")
 print(f"Day total incl GST: ${day_total:.2f}")
 print("=" * 40)
-
-
-
 
