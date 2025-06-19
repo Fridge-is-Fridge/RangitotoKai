@@ -154,4 +154,3 @@ print(f"Total orders: {total_orders}")
 print(f"Day total excl GST: ${day_total_excl:.2f}")
 print(f"Day total incl GST: ${day_total:.2f}")
 print("=" * 40)
-
